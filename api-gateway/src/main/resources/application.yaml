@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: customer-service
+              uri: lb://customer-service
+              predicates:
+                - Path=/customer/**
+            - id: account-service
+              uri: lb://account-service
+              predicates:
+                - Path=/account/**
+server:
+  port: 8085
+
+
+eureka:
+  instance:
+    hostname: localhost
+    instance-id: localhost:api-gateway:8085
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+        defaultZone: http://localhost:8081/eureka
