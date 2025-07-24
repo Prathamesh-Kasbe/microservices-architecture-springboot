@@ -18,10 +18,10 @@
          ^         ^
          |         |
          |         |
-+-----------------+   +------------------+
-| Customer-Service|   | Account-Service  |
-| (Spring Boot)   |   | (Spring Boot)    |
-+-----------------+   +------------------+
++-----------------+         +------------------+
+| Customer-Service|  < - >  | Account-Service  |
+| (Spring Boot)   |         | (Spring Boot)    |
++-----------------+         +------------------+
          ^                   ^
          |                   |
          |                   |
