@@ -1,0 +1,37 @@
++-----------------------------+
+|      Client / Postman       |
+|  (Request: /customer/**)    |
+|  (Request: /account/**)     |
++-----------------------------+
+               |
+               v
+       +------------------+
+       |   API Gateway    |
+       | (Spring Gateway) |
+       +------------------+
+               |
+               v
++-------------------------+
+|   Service Registry      |
+|   (Eureka Server)       |
++-------------------------+
+         ^         ^
+         |         |
+         |         |
++-----------------+   +------------------+
+| Customer-Service|   | Account-Service  |
+| (Spring Boot)   |   | (Spring Boot)    |
++-----------------+   +------------------+
+         ^                   ^
+         |                   |
+         |                   |
+         +---------+---------+
+                   |
+                   v
+         +---------------------+
+         |     Config Server    |
+         |  (Spring Cloud -     |
+         |   native profile)    |
+         |  Reads from local    |
+         |  /config directory   |
+         +---------------------+
