@@ -13,6 +13,14 @@ public class Customer{
 	
 	}
 
+	public Customer(String firstName, String lastName, Long customerId, List<Account> accounts) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.customerId = customerId;
+		this.accounts = accounts;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}

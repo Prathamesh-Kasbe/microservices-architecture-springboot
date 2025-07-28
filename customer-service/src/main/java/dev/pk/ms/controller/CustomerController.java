@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,13 +47,13 @@ public class CustomerController {
 		return "Failed to add Customer";
 	}
 	
-	@DeleteMapping
-	public String removeAllCustomers() {
-		boolean isCustomerRemoved = customerRepository.removeAllCustomers();
+	@DeleteMapping("customerId/{customerId}")
+	public String removeCustomerByCustomerId(@PathVariable Long customerId) {
+		boolean isCustomerRemoved = customerRepository.removeCustomerByCustomerId(customerId);
 		if(isCustomerRemoved) {
-			return "Customers removed Successfully";
+			return "Customer removed Successfully";
 		}
-		return "Failed to remove Customers";
+		return "Failed to remove Customer";
 	}
 	
 	@GetMapping("/withAccounts")

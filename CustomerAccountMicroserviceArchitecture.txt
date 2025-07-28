@@ -35,3 +35,20 @@
          |  Reads from local    |
          |  /config directory   |
          +---------------------+
+		 
+___________________________________________________________________________________________________________________________________
+
+Spring security using JWT token
+[Client]
+   |
+   |---> POST /login → Auth Service → returns JWT
+   |
+   |---> GET /customer/profile (with JWT in Header)
+        |
+        ↓
+   [API Gateway]
+        |-- Validates JWT
+        |-- Checks Roles
+        |-- Forwards to:
+             ├─ /customer/** → customer-service
+             └─ /account/**  → account-service		 
