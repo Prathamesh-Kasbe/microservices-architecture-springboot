@@ -39,6 +39,7 @@ public class AccountController {
 	
 	@GetMapping
 	public List<Account> getAllAccounts(){
+		System.out.println("In get all accounts");
 		return accountRepository.getAllAccounts();
 	}
 	
@@ -47,9 +48,9 @@ public class AccountController {
 		return accountRepository.getAccountsByCustomerId(customerId);
 	}
 	
-	@DeleteMapping
-	public String removeAllAccounts() {
-		boolean isAccountRemoved = accountRepository.removeAllAccounts();
+	@DeleteMapping("account/{accountNumber}")
+	public String removeAccountByAccountNumber(@PathVariable String accountNumber) {
+		boolean isAccountRemoved = accountRepository.removeAccountByAccountNumber(accountNumber);
 		if(isAccountRemoved) {
 			return "Accounts removed Successfully";
 		}

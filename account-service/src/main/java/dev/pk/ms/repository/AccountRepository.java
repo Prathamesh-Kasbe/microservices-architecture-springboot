@@ -7,13 +7,23 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 import dev.pk.ms.AccountServiceApplication;
 import dev.pk.ms.model.Account;
+import jakarta.annotation.PostConstruct;
 
 @Repository
 public class AccountRepository {
 
     private final AccountServiceApplication accountServiceApplication;
 
-	public List<Account> accounts = new ArrayList<>();
+	public List<Account> accounts;
+	
+	@PostConstruct
+	private void initializeAccounts() {
+		accounts = new ArrayList<>();
+		accounts.add(new Account(0001l, "Savings", "2001", 1000));
+		accounts.add(new Account(0002l, "Current", "2002", 2000));
+		accounts.add(new Account(0003l, "FD", "2003", 3000));
+		accounts.add(new Account(0004l, "PPF", "2004", 4000));
+	}
 
     AccountRepository(AccountServiceApplication accountServiceApplication) {
         this.accountServiceApplication = accountServiceApplication;
@@ -25,7 +35,6 @@ public class AccountRepository {
 	
 	public List<Account> getAllAccounts(){
 		return accounts;
-		
 	}
 
 	public List<Account> getAccountsByCustomerId(Long customerId) {
@@ -33,7 +42,7 @@ public class AccountRepository {
 				filter(account -> account.customerId().equals(customerId)).toList();
 	}
 
-	public boolean removeAllAccounts() {
-		return accounts.removeAll(accounts);
+	public boolean removeAccountByAccountNumber(String accountNumber) {
+		return accounts.removeIf(account -> account.accountNumber() == accountNumber);
 	}
 }
