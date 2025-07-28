@@ -1,6 +1,8 @@
 spring:
   application:
     name: api-gateway
+  config:
+    import: "optional:configserver:http://localhost:8083"
   cloud:
     gateway:
       server:
@@ -10,10 +12,14 @@ spring:
               uri: lb://customer-service
               predicates:
                 - Path=/customer/**
+              filters:
+                - name: JwtAuthenticationFilter
             - id: account-service
               uri: lb://account-service
               predicates:
                 - Path=/account/**
+              filters:
+                - name: JwtAuthenticationFilter
 server:
   port: 8085
 
@@ -27,3 +33,9 @@ eureka:
     fetch-registry: true
     service-url:
         defaultZone: http://localhost:8081/eureka
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: refresh,health,info
