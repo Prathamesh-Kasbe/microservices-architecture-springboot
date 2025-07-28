@@ -1,0 +1,5 @@
+jwt:
+  secret: jwt-Secret-To-Generate-Secure-Jwt-Token-For-My-Microservice
+  
+server:
+  port: 8086
