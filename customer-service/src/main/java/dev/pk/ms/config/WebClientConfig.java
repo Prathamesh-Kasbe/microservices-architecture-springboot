@@ -1,6 +1,7 @@
 package dev.pk.ms.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.reactive.LoadBalancedExchangeFilterFunction;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,9 @@ public class WebClientConfig {
 	
 	private LoadBalancedExchangeFilterFunction loadBalancedExchangeFilterFunction;
 	
+	@Value("${internal.secret}")
+    private String internalSecret;
+	
 	@Autowired
 	public void setLoadBalancedExchangeFilterFunction(
 			LoadBalancedExchangeFilterFunction loadBalancedExchangeFilterFunction) {
@@ -27,6 +31,7 @@ public class WebClientConfig {
 		return WebClient.builder().
 				baseUrl("http://account-service")
 				.filter(loadBalancedExchangeFilterFunction)
+				.defaultHeader("X-Internal-Secret", internalSecret)
 				.build();
 	}
 	

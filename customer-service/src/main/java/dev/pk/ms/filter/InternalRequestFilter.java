@@ -1,36 +1,30 @@
+
 package dev.pk.ms.filter;
 
-import java.io.IOException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+import reactor.core.publisher.Mono;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+public class InternalRequestFilter implements WebFilter {
 
-@Component
-public class InternalRequestFilter extends OncePerRequestFilter {
+    private final String internalSecret;
 
-	@Value("${internal.secret}")
-    private String internalSecret;
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
-    	System.out.println("_____________________________In customer Filter_____________________________________");
-        String headerValue = request.getHeader("X-Internal-Secret");
-
-        if (!internalSecret.equals(headerValue)) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("Access denied: Invalid gateway header");
-            return;
-        }
-
-        filterChain.doFilter(request, response);
+    public InternalRequestFilter(String internalSecret) {
+        this.internalSecret = internalSecret;
     }
 
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String header = exchange.getRequest().getHeaders().getFirst("X-Internal-Secret");
+        System.out.println("InternalREquestFilter________________________________");
+        if (!internalSecret.equals(header)) {
+        	System.out.println("Internal secret check________________________________");
+            exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+            return exchange.getResponse().setComplete();
+        }
+        return chain.filter(exchange);
+    }
 }

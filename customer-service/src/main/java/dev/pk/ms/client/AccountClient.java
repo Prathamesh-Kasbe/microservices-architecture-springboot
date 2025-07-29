@@ -7,11 +7,12 @@ import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 
 import dev.pk.ms.model.Account;
+import reactor.core.publisher.Mono;
 
 
 @HttpExchange
 public interface AccountClient {
 
 	@GetExchange("/account/customer/{customerId}")
-	public List<Account> getAccountsByCustomerId(@PathVariable Long customerId);
+	public Mono<List<Account>> getAccountsByCustomerId(@PathVariable Long customerId);
 }

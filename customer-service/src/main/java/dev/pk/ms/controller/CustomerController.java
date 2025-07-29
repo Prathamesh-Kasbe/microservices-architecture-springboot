@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.pk.ms.client.AccountClient;
 import dev.pk.ms.model.Customer;
 import dev.pk.ms.repository.CustomerRepository;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/customer")
@@ -57,9 +58,14 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/withAccounts")
-	public List<Customer> getAllCustomersWithAccounts(){
-		List<Customer> customers = customerRepository.getAllCustomers();
-		customers.forEach(customer -> customer.setAccounts(accountClient.getAccountsByCustomerId(customer.getCustomerId())));
-		return customers;
+	public Flux<Customer> getAllCustomersWithAccounts() {
+	    return Flux.fromIterable(customerRepository.getAllCustomers())
+	        .flatMap(customer ->
+	            accountClient.getAccountsByCustomerId(customer.getCustomerId())
+	                .map(accounts -> {
+	                    customer.setAccounts(accounts);
+	                    return customer;
+	                })
+	        );
 	}
 }
